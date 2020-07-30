@@ -113,7 +113,7 @@ FormField.propTypes = {
   label: PropTypes.string.isRequired,
   type: PropTypes.string,
   name: PropTypes.string.isRequired,
-  value: PropTypes.number,
+  value: PropTypes.string,
   onChange: PropTypes.func,
 };
 
