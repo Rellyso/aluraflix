@@ -3,102 +3,109 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import PageDefault from '../../../components/PageDefault';
 import FormField from '../../../components/FormField';
+import Button from '../../../components/Button';
+import useForm from '../../../hooks/useForm';
 
 function CadastroCategoria() {
-  const [categorias, setCategorias] = useState([]);
-  const initialValues = {
-    name: '',
-    description: '',
-    color: '',
+  const valoresIniciais = {
+    nome: '',
+    descricao: '',
+    cor: '',
   };
-  const [values, setValues] = useState(initialValues);
 
-  function setValue(key, value) {
-    setValues({
-      ...values,
-      [key]: value,
-    });
-  }
+  const { handleChange, values, clearForm } = useForm(valoresIniciais);
 
-  function functionHandler(e) {
-    // const { getAttribute, value } = e.target
-    setValue(
-      e.target.getAttribute('name'),
-      e.target.value,
-    );
-  }
+  const [categorias, setCategorias] = useState([]);
 
   useEffect(() => {
-    const URL = window.location.hostname.includes('localhost')
-      ? 'http://localhost:8080/category'
-      : 'https://aluraflixv2.herokuapp.com/category';
-
-    fetch(URL)
+    const URL_TOP = window.location.hostname.includes('localhost')
+      ? 'http://localhost:8080/categorias'
+      : 'https://devsoutinhoflix.herokuapp.com/categorias';
+    // E a ju ama variáveis
+    fetch(URL_TOP)
       .then(async (respostaDoServidor) => {
         const resposta = await respostaDoServidor.json();
         setCategorias([
           ...resposta,
         ]);
       });
+
+    // setTimeout(() => {
+    //   setCategorias([
+    //     ...categorias,
+    //     {
+    //       id: 1,
+    //       nome: 'Front End',
+    //       descricao: 'Uma categoria bacanudassa',
+    //       cor: '#cbd1ff',
+    //     },
+    //     {
+    //       id: 2,
+    //       nome: 'Back End',
+    //       descricao: 'Outra categoria bacanudassa',
+    //       cor: '#cbd1ff',
+    //     },
+    //   ]);
+    // }, 4 * 1000);
   }, []);
 
   return (
     <PageDefault>
       <h1>
-        Cadastro de categoria:
-        {values.name}
+        Cadastro de Categoria:
+        {values.nome}
       </h1>
 
-      <form onSubmit={function handleSubmit(e) {
-        e.preventDefault();
+      <form onSubmit={function handleSubmit(infosDoEvento) {
+        infosDoEvento.preventDefault();
         setCategorias([
           ...categorias,
           values,
         ]);
 
-        setValues(initialValues);
+        clearForm();
       }}
       >
+
         <FormField
-          label="Nome da Categoria: "
-          type="text"
-          name="name"
-          value={values.name}
-          onChange={functionHandler}
+          label="Nome da Categoria"
+          name="nome"
+          value={values.nome}
+          onChange={handleChange}
         />
 
         <FormField
-          as="textarea"
-          label="Descrição: "
-          type="text"
-          name="description"
-          value={values.description}
-          onChange={functionHandler}
+          label="Descrição"
+          type="textarea"
+          name="descricao"
+          value={values.descricao}
+          onChange={handleChange}
         />
 
         <FormField
-          label="Cor: "
+          label="Cor"
           type="color"
-          name="color"
-          value={values.color}
-          onChange={functionHandler}
+          name="cor"
+          value={values.cor}
+          onChange={handleChange}
         />
 
-        <button type="submit">Cadastrar</button>
-
+        <Button>
+          Cadastrar
+        </Button>
       </form>
 
       {categorias.length === 0 && (
         <div>
+          {/* Cargando... */}
           Loading...
         </div>
       )}
 
       <ul>
-        {categorias.map((categoria, index) => (
-          // eslint-disable-next-line react/no-array-index-key
-          <li key={`${categoria}${index}`}>
-            {categoria.name}
+        {categorias.map((categoria) => (
+          <li key={`${categoria.titulo}`}>
+            {categoria.titulo}
           </li>
         ))}
       </ul>
