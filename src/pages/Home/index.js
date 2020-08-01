@@ -1,29 +1,71 @@
-import React, { useEffect } from 'react';
-import dadosIniciais from '../../dados_iniciais.json';
+import React, { useEffect, useState } from 'react';
 import Menu from '../../components/Menu';
 import BannerMain from '../../components/BannerMain';
 import Carousel from '../../components/Carousel';
-import Footer from '../../components/Footer';
+import PageDefault from '../../components/PageDefault';
 import categoriasRepository from '../../repositories/categorias';
 
 function Home() {
-  useEffect(() => {
-    categoriasRepository.getAllWithVideos();
+  const [dadosIniciais, setDadosIniciais] = useState([]);
 
-  // fetch(URL_BACKEND_TOP)
-  //   .then(async (respostaDoServidor) => {
-  //     const resposta = await respostaDoServidor.json();
-  //     setCategorias([
-  //       ...resposta,
-  //     ]);
-  //   });
-  });
+  useEffect(() => {
+    categoriasRepository.getAllWithVideos()
+      .then((categoriasComVideos) => {
+        setDadosIniciais(categoriasComVideos);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  }, []);
 
   return (
-    <div style={{ background: '#141414' }}>
+    <PageDefault paddingAll={0}>
       <Menu />
 
-      <BannerMain
+      {dadosIniciais.length === 0 && (<div>Loading...</div>)}
+
+      {dadosIniciais.map((categoria, indice) => {
+        if (indice === 0) {
+          return (
+            <div key={categoria.id}>
+              <BannerMain
+                videoTitle={dadosIniciais[0].videos[0].titulo}
+                url={dadosIniciais[0].videos[0].url}
+                videoDescription="O que é Front-end? Trabalhando na área os termos de HTML, CSS e Javascript"
+              />
+
+              <Carousel
+                ignoreFirstVideo
+                category={dadosIniciais[0]}
+              />
+            </div>
+          );
+        }
+
+        return (
+          <Carousel
+            key={categoria.id}
+            category={categoria}
+          />
+        );
+      })}
+
+      {/* {dadosIniciais.length >= 1 && (
+        <>
+          <BannerMain
+            videoTitle={dadosIniciais[0].videos[0].titulo}
+            url={dadosIniciais[0].videos[0].url}
+            videoDescription="O que é Front-end? Trabalhando na área"
+          />
+
+          <Carousel
+            ignoreFirstVideo
+            category={dadosIniciais[0]}
+          />
+        </>
+      )} */}
+
+      {/* <BannerMain
         videoTitle={dadosIniciais.categorias[0].videos[0].titulo}
         url={dadosIniciais.categorias[0].videos[0].url}
         videoDescription="O que é Front-end? Trabalhando na área"
@@ -57,10 +99,9 @@ function Home() {
       <Carousel
         ignoreFirstVideo
         category={dadosIniciais.categorias[5]}
-      />
+      /> */}
 
-      <Footer />
-    </div>
+    </PageDefault>
   );
 }
 
