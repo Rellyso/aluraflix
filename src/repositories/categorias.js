@@ -1,10 +1,18 @@
 /* eslint-disable linebreak-style */
 import config from '../config';
 
-function getAllWithVideos() {
-  console.log(config.URL_BACKEND_TOP);
+const URL_CATEGORIES = `${config.URL_BACKEND_TOP}/categorias`;
 
-  return config.URL_BACKEND_TOP;
+function getAllWithVideos() {
+  return fetch(`${URL_CATEGORIES}?_embed=videos`)
+    .then(async (respostaDoServidor) => {
+      if (respostaDoServidor.ok) {
+        const resposta = await respostaDoServidor.json();
+        return resposta;
+      }
+
+      throw new Error('Não foi possível receber os dados :(');
+    });
 }
 
 export default {
