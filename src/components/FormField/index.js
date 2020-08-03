@@ -1,3 +1,4 @@
+/* eslint-disable react/default-props-match-prop-types */
 /* eslint-disable linebreak-style */
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -73,7 +74,7 @@ function FormField({
   const tag = isTypeTextarea ? 'textarea' : 'input';
 
   const hasValue = Boolean(value.length);
-  const hasSuggestions = Boolean(suggestions.length);
+  const hasSuggestions = Boolean(value.length);
 
   return (
     <FormFieldWrapper>
@@ -88,13 +89,14 @@ function FormField({
           name={name}
           hasValue={hasValue}
           onChange={onChange}
-          autoComplete={hasSuggestions ? 'off' : 'on'}
+          autoComplete={hasSuggestions ? "off" : 'on'}
           list={hasSuggestions ? `suggestionFor_${fieldId}` : undefined}
         />
         <Label.Text>
           {label}
           :
         </Label.Text>
+
         {
           hasSuggestions && (
             <datalist id={`suggestionFor_${fieldId}`}>
@@ -117,7 +119,7 @@ function FormField({
 FormField.defaultProps = {
   type: 'text',
   value: '',
-  onChange: () => {},
+  onChange: () => { },
   suggestions: [],
 };
 

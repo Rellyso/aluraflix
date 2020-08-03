@@ -1,24 +1,30 @@
-import styled from 'styled-components'
-import { Link } from 'react-router-dom'
+/* eslint-disable linebreak-style */
+import styled from 'styled-components';
+// import { Link } from 'react-router-dom';
 
-const Button = styled(Link)`
-    color: var(--white);
-    border: 1px solid var(--white);
+const Button = styled.button`
     box-sizing: border-box;
-    cursor: pointer;
+    display: inline-block;
     padding: 16px 24px;
+    
+    border: 1px solid var(--white);
+    border-radius: 5px;
+    outline: none;
+
+    color: var(--white);
+    background: transparent;
+
     font-style: normal;
     font-weight: bold;
     font-size: 16px;
-    outline: none;
-    border-radius: 5px;
     text-decoration: none;
-    display: inline-block;
+
     transition: opacity .3s;
+    cursor: pointer;
     &:hover,
     &:focus {
         opacity: .5;
     }
-`
+`;
 
-export default Button
+export default Button;
